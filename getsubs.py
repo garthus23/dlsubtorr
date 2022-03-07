@@ -29,43 +29,40 @@ if __name__ == "__main__":
 	else:
 		exit(0)
 			
-	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
+#	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
 #	print(url)
-	r = requests.get(url)
+#	r = requests.get(url)
 
-	with open('allsubs', 'w') as f:
-		f.write(r.text)
+#	with open('allsubs', 'w') as f:
+#		f.write(r.text)
 
 
 	with open('allsubs', 'r') as f:
 		soup = BeautifulSoup(f.read(), 'html.parser')		
-#		print(soup)
 		subs = soup.find_all(id="container95m")
-
-
-#		print(subs)		
+		i = 1
+		indexall = my_dictionary()
 		for sub in subs:
 			try:
 				title = sub.find(class_="NewsTitle").text.split(',')[0]
-#				print(title)
 				langs = sub.find_all(class_="language")
 				links = sub.find_all('a', class_="buttonDownload")
-#				for language in alllang:
-#					print(language.text)
 				lang = my_dictionary()
 				for language, link in zip(langs, links) :
-#					print(language.text.replace('\n',''))
-#					print('~~~~~~~')
-#					print(link.get('href'))
 					lang.add(language.text.replace('\n', ''), link.get('href'))
-#				print(lang)
 				epsubs = my_dictionary()
 				epsubs.add(title, lang)
-				print(epsubs)
-				
+				indexall.add(i, epsubs)
+				i+=1
+
 			except Exception as e: 
 				pass
-#				print(e)
+
+	for ind,values in indexall.items():
+		print("{} : ".format(ind), end='')
+		for key in values:
+			print(key)
+
 
 #r = requests.get("https://www.addic7ed.com/original/139326/1", headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
