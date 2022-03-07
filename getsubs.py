@@ -29,12 +29,11 @@ if __name__ == "__main__":
 	else:
 		exit(0)
 			
-#	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
-#	print(url)
-#	r = requests.get(url)
+	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
+	r = requests.get(url)
 
-#	with open('allsubs', 'w') as f:
-#		f.write(r.text)
+	with open('allsubs', 'w') as f:
+		f.write(r.text)
 
 
 	with open('allsubs', 'r') as f:
@@ -49,7 +48,7 @@ if __name__ == "__main__":
 				links = sub.find_all('a', class_="buttonDownload")
 				lang = my_dictionary()
 				for language, link in zip(langs, links) :
-					lang.add(language.text.replace('\n', ''), link.get('href'))
+					lang.add(language.text.replace('\n', '').split(' (')[0], link.get('href'))
 				epsubs = my_dictionary()
 				epsubs.add(title, lang)
 				indexall.add(i, epsubs)
@@ -58,11 +57,14 @@ if __name__ == "__main__":
 			except Exception as e: 
 				pass
 
+
 	for ind,values in indexall.items():
 		print("{} : ".format(ind), end='')
 		for key in values:
-			print(key)
-
+			print("{}".format(key), end='')
+			for lang in indexall[ind][key]:
+				print(" [{}".format(lang), end=']')
+			print('')
 
 #r = requests.get("https://www.addic7ed.com/original/139326/1", headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
