@@ -46,6 +46,8 @@ if __name__ == "__main__":
 				title = sub.find(class_="NewsTitle").text.split(',')[0]
 				langs = sub.find_all(class_="language")
 				links = sub.find_all('a', class_="buttonDownload")
+				if sub.find(title="Hearing Impaired"):
+						title = "{} ¤ ".format(title)
 				lang = my_dictionary()
 				for language, link in zip(langs, links) :
 					lang.add(language.text.replace('\n', '').split(' (')[0], link.get('href'))
@@ -57,17 +59,57 @@ if __name__ == "__main__":
 			except Exception as e: 
 				pass
 
+	print(indexall)
 
+	print("\n[ list of subtitles Available ] : \n")
 	for ind,values in indexall.items():
-		print("{} : ".format(ind), end='')
+		print("[{0:3} ".format(ind), end=']')
 		for key in values:
-			print("{}".format(key), end='')
+			print("[{0:30}".format(key), end=']')
 			for lang in indexall[ind][key]:
-				print(" [{}".format(lang), end=']')
+				print("[{}".format(lang), end=']')
 			print('')
 
-#r = requests.get("https://www.addic7ed.com/original/139326/1", headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
+	print('')
+	choice = input("[ Which Sub do you want  ? ] [1-{}] : ".format(i-1))
+	print('')
 
-#with open('url', 'w') as f:
-#	f.write(r.text)
-#	f.close()
+	if choice.isdigit():
+		choice = int(choice)
+	else:
+		print("not number")
+		exit(12)
+
+	if choice < i:
+		for value in indexall[choice] :
+			ep = value
+		if len(indexall[choice][ep]) == 1 :
+			lang = list(indexall[choice][ep].keys())[0]
+		else:
+			j = 1
+			for lang in indexall[choice][ep] :
+				print("[{0:3}][{1}]".format(j, lang))
+				j+=1
+			print('')
+			lang = input("[ Which Lang do you want ? ] [1-{}]: ".format(j-1)) or "English"
+			if lang.isdigit():
+				if int(lang) < j:
+					lang = int(lang) - 1
+					lang = list(indexall[choice][ep].keys())[lang]
+		try:
+			link = indexall[choice][ep][lang]
+		except:	
+			pass
+			print("\nNot good choice")
+			exit(13)
+		
+	else:
+		print("\nNot in range")
+		exit(12)
+
+
+
+	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
+
+	with open('sub', 'w') as f:
+		f.write(r.text)
