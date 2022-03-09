@@ -17,7 +17,7 @@ pip install requests
 
 ./geturl.py [serie] [saison] [episode]
 
-ex :
+or
 
-./geturl.py "grey's anatomy" 5 10
+./geturl.py
 

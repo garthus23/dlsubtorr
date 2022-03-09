@@ -21,20 +21,21 @@ class my_dictionary(dict):
 
 if __name__ == "__main__":
 
+	url = "https://www.addic7ed.com"
+	r = requests.get(url)
+	
+	with open('tvlist', 'w') as f:
+		f.write(r.text)
+
 	if len(sys.argv) == 4 :
 		name = sys.argv[1]
 		season = sys.argv[2]
 		episode = sys.argv[3]
 
 	else:
-		print("./getsubs.py [TvShowName] [Season] [Episode]")
-		exit(0)
-			
-#	url = "https://www.addic7ed.com"
-#	r = requests.get(url)
-	
-#	with open('tvlist', 'w') as f:
-#		f.write(r.text)
+		name = input("Show Title : ")
+		season = input("Season : ")
+		episode = input("Episode : ")
 
 	with open('tvlist', 'r') as f:
 		soup = BeautifulSoup(f.read(), 'html.parser')
@@ -46,6 +47,7 @@ if __name__ == "__main__":
 				showlist.add(i, show.text.lower())
 				i+=1
 	count = 0
+	print('')
 	for key, value in showlist.items():
 		if name in value :
 			print("[{0:4}] [{1}]".format(key, value))
@@ -60,6 +62,10 @@ if __name__ == "__main__":
 		print("Err : Not a Digit or not in range")
 		exit(12)
 	name = showlist[choice]
+
+	if season.isdigit() and episode.isdigit():
+		season = int(season)
+		episode = int(episode)
 
 	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
 	r = requests.get(url)
@@ -144,7 +150,6 @@ if __name__ == "__main__":
 	else:
 		print("\nNot in range")
 		exit(12)
-
 
 
 	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
