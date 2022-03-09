@@ -27,8 +27,40 @@ if __name__ == "__main__":
 		episode = sys.argv[3]
 
 	else:
+		print("./getsubs.py [TvShowName] [Season] [Episode]")
 		exit(0)
 			
+#	url = "https://www.addic7ed.com"
+#	r = requests.get(url)
+	
+#	with open('tvlist', 'w') as f:
+#		f.write(r.text)
+
+	with open('tvlist', 'r') as f:
+		soup = BeautifulSoup(f.read(), 'html.parser')
+		tvshows = soup.find_all(id="qsShow")
+		showlist=my_dictionary()
+		i = 1
+		for tvshow in tvshows:
+			for show in tvshow:
+				showlist.add(i, show.text.lower())
+				i+=1
+	count = 0
+	for key, value in showlist.items():
+		if name in value :
+			print("[{0:4}] [{1}]".format(key, value))
+			count+=1
+	if count == 0:
+		print("No TvShow Found")
+		exit(12)
+	choice = input("\nChoose a TvShow [0:{}] : ".format(len(showlist)))
+	if choice.isdigit() and int(choice) < len(showlist):
+		choice = int(choice)
+	else:
+		print("Err : Not a Digit or not in range")
+		exit(12)
+	name = showlist[choice]
+
 	url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)	
 	r = requests.get(url)
 
@@ -63,6 +95,7 @@ if __name__ == "__main__":
 			except Exception as e: 
 				pass
 
+	count = 0
 	print("\n[ list of subtitles Available ] : \n")
 	for ind,values in indexall.items():
 		print("[{0:3} ".format(ind), end=']')
@@ -70,10 +103,13 @@ if __name__ == "__main__":
 			print("[{0:30}".format(key), end=']')
 			for lang in indexall[ind][key]:
 				print("[{}".format(lang), end=']')
+				count+=1
 			print('')
+	if count == 0:
+		print("no Subs Found, Season or Episode out of range")
+		exit(23)
 
-	print('')
-	choice = input("[ Which Sub do you want  ? ] [1-{}] : ".format(i-1))
+	choice = input("\n[ Which Sub do you want  ? ] [1-{}] : ".format(i-1))
 	print('')
 
 	if choice.isdigit():
