@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 import requests
 import sys
+import os
 
 
 
@@ -154,5 +155,41 @@ if __name__ == "__main__":
 
 	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
-	with open('sub', 'w') as f:
+	subname = "{}_{}_S{:02d}_E{:02d}.srt".format(name, ep, season, episode).replace(' ','_')
+	with open(subname, 'w') as f:
 		f.write(r.text)
+
+	os.remove("allsubs")
+	os.remove("tvlist")
+
+
+	season = "{:02d}".format(season)
+	episode = "{:02d}".format(episode)
+	
+	url = "https://eztv.ro/search/{}".format(name)
+	r = requests.get(url)
+
+	with open("torrentlist", 'w') as f:
+		f.write(r.text)
+
+	with open("torrentlist", "r") as f:
+		soup = BeautifulSoup(f.read(), 'html.parser')
+		torrents = soup.find_all(class_="magnet")
+		torrentdict = my_dictionary()
+		i = 1
+		for torrent in torrents :
+			if "S{}E{}".format(season, episode) in torrent.get('title'):
+				torrentdict.add(i, torrent.get('href'))
+				print("[{0:3} ][{1}]".format(i, torrent.get('title')))
+				i+=1
+
+		choice = input("\nChoose a toorent : ")
+
+		if choice.isdigit() and int(choice) < i:
+			choice = int(choice)
+		else:
+			print('Not a good choice MF')
+			exit(13)
+		
+		print(torrentdict[choice])
+	os.remove("torrentlist")
