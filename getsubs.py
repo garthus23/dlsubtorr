@@ -42,28 +42,36 @@ if __name__ == "__main__":
 		soup = BeautifulSoup(f.read(), 'html.parser')
 		tvshows = soup.find_all(id="qsShow")
 		showlist=my_dictionary()
+
 		i = 1
 		for tvshow in tvshows:
 			for show in tvshow:
-				showlist.add(i, show.text.lower())
-				i+=1
-	count = 0
+				if name in show.text.lower():
+					showlist.add(i, show.text.lower())
+					i+=1
+
 	print('')
-	for key, value in showlist.items():
-		if name in value :
-			print("[{0:4}] [{1}]".format(key, value))
-			count+=1
-	if count == 0:
+	if i == 0:
 		print("No TvShow Found")
 		exit(12)
-	choice = input("\nChoose a TvShow [0:{}] : ".format(len(showlist)))
-	if choice.isdigit() and int(choice) < len(showlist):
-		choice = int(choice)
-	else:
-		print("Err : Not a Digit or not in range")
-		exit(12)
-	name = showlist[choice]
 
+
+	for key, value in showlist.items():
+		if name in value :
+			print("[{0:3} ] [{1}]".format(key, value))
+
+	if len(showlist) == 1:
+		name = showlist[1]
+	else:
+		choice = input("\nChoose a TvShow [0:{}] : ".format(len(showlist)))
+		if choice.isdigit() and int(choice) < len(showlist):
+			choice = int(choice)
+		else:
+			print("Err : Not a Digit or not in range")
+			exit(12)
+
+		name = showlist[choice]
+		
 	if season.isdigit() and episode.isdigit():
 		season = int(season)
 		episode = int(episode)
@@ -82,7 +90,7 @@ if __name__ == "__main__":
 		indexall = my_dictionary()
 		for sub in subs:
 			try:
-				title = sub.find(class_="NewsTitle").text.split(',')[0]
+				title = sub.find(class_="NewsTitle").text.split(',')[0].replace('Version ', '')
 				langs = sub.find_all(class_="language")
 				links = sub.find_all('a', class_="buttonDownload")
 				for elem in links:
@@ -152,6 +160,8 @@ if __name__ == "__main__":
 		print("\nNot in range")
 		exit(12)
 
+	os.remove("allsubs")
+	os.remove("tvlist")
 
 	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
@@ -159,13 +169,12 @@ if __name__ == "__main__":
 	with open(subname, 'w') as f:
 		f.write(r.text)
 
-	os.remove("allsubs")
-	os.remove("tvlist")
 
 
 	season = "{:02d}".format(season)
 	episode = "{:02d}".format(episode)
-	
+
+	name = name.replace('\'', '')	
 	url = "https://eztv.ro/search/{}".format(name)
 	r = requests.get(url)
 
@@ -176,14 +185,18 @@ if __name__ == "__main__":
 		soup = BeautifulSoup(f.read(), 'html.parser')
 		torrents = soup.find_all(class_="magnet")
 		torrentdict = my_dictionary()
+		
+		print('')
 		i = 1
+		title="S{}E{}".format(season, episode)
 		for torrent in torrents :
-			if "S{}E{}".format(season, episode) in torrent.get('title'):
-				torrentdict.add(i, torrent.get('href'))
-				print("[{0:3} ][{1}]".format(i, torrent.get('title')))
-				i+=1
+			if title in torrent.get('title'):
+				if "720p" in torrent.get('title') or "1080p" in torrent.get('title'):
+					torrentdict.add(i, torrent.get('href'))
+					print("[{0:3} ][{1}]".format(i, torrent.get('title')))
+					i+=1
 
-		choice = input("\nChoose a toorent : ")
+		choice = input("\nChoose a torrent : ")
 
 		if choice.isdigit() and int(choice) < i:
 			choice = int(choice)
@@ -191,5 +204,12 @@ if __name__ == "__main__":
 			print('Not a good choice MF')
 			exit(13)
 		
-		print(torrentdict[choice])
+		vidname = '{}_{}_S{}_E{}.mkv'.format(name, ep, season, episode).replace(' ','_')
+		
+		os.environ["TNAME"] = vidname
+		os.environ["TLINK"] = torrentdict[choice]		
+		
+		os.system("echo $TNAME")
+		os.system("echo $TLINK")
+		
 	os.remove("torrentlist")
