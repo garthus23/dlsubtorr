@@ -34,7 +34,7 @@ if __name__ == "__main__":
 		episode = sys.argv[3]
 
 	else:
-		name = input("Show Title : ")
+		name = input("Show Title : ").lower()
 		season = input("Season : ")
 		episode = input("Episode : ")
 
@@ -50,12 +50,11 @@ if __name__ == "__main__":
 					showlist.add(i, show.text.lower())
 					i+=1
 
-	print('')
 	if i == 0:
 		print("No TvShow Found")
 		exit(12)
 
-
+	print('')
 	for key, value in showlist.items():
 		if name in value :
 			print("[{0:3} ] [{1}]".format(key, value))
@@ -160,12 +159,11 @@ if __name__ == "__main__":
 		print("\nNot in range")
 		exit(12)
 
-	os.remove("allsubs")
-	os.remove("tvlist")
 
 	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
-	subname = "{}_{}_S{:02d}_E{:02d}.srt".format(name, ep, season, episode).replace(' ','_')
+	name = name.replace('\'', '')	
+	subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
 	with open(subname, 'w') as f:
 		f.write(r.text)
 
@@ -174,7 +172,6 @@ if __name__ == "__main__":
 	season = "{:02d}".format(season)
 	episode = "{:02d}".format(episode)
 
-	name = name.replace('\'', '')	
 	url = "https://eztv.ro/search/{}".format(name)
 	r = requests.get(url)
 
@@ -196,20 +193,23 @@ if __name__ == "__main__":
 					print("[{0:3} ][{1}]".format(i, torrent.get('title')))
 					i+=1
 
-		choice = input("\nChoose a torrent : ")
+	choice = input("\n[ Choose a torrent ] [1-{}] : ".format(i-1))
 
-		if choice.isdigit() and int(choice) < i:
+	if choice.isdigit() and int(choice) < i:
 			choice = int(choice)
-		else:
-			print('Not a good choice MF')
-			exit(13)
+	else:
+		print('Not a good choice MF')
+		exit(13)
 		
-		vidname = '{}_{}_S{}_E{}.mkv'.format(name, ep, season, episode).replace(' ','_')
+	vidname = '{}_S{}E{}_{}.mkv'.format(name, season, episode, ep).replace(' ','_')
 		
-		os.environ["TNAME"] = vidname
-		os.environ["TLINK"] = torrentdict[choice]		
+	os.environ["TNAME"] = vidname
+	os.environ["TLINK"] = torrentdict[choice]		
+	os.environ["SEP"] = title
 		
-		os.system("echo $TNAME")
-		os.system("echo $TLINK")
-		
+	os.system('aria2c --seed-time=0  $TLINK')
+	os.system('ls | grep $SEP | xargs -I {} mv {} $TNAME')
+	
 	os.remove("torrentlist")
+	os.remove("allsubs")
+	os.remove("tvlist")
