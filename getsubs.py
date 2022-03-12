@@ -2,6 +2,7 @@
 
 from bs4 import BeautifulSoup
 import requests
+import re
 import sys
 import os
 
@@ -162,7 +163,9 @@ if __name__ == "__main__":
 
 	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 
-	name = name.replace('\'', '')	
+	name = name.replace('\'', '')
+	ep = ep.replace('.','_')
+
 	subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
 	with open(subname, 'w') as f:
 		f.write(r.text)
@@ -206,10 +209,14 @@ if __name__ == "__main__":
 	os.environ["TNAME"] = vidname
 	os.environ["TLINK"] = torrentdict[choice]		
 	os.environ["SEP"] = title
-		
-	os.system('aria2c --seed-time=0  $TLINK')
-	os.system('ls | grep $SEP | xargs -I {} mv {} $TNAME')
-	
+
+
+	name = re.split(r'[\ \.]', name)[0]
+	os.environ["SNAME"] = name
+
+	os.system('aria2c --seed-time=0  --log-level=info --summary-interval=3600 $TLINK')
+	os.system('ls | grep "$SEP.*.mkv" | grep -i "$SNAME" | xargs -I {} mv {} $TNAME')
+
 	os.remove("torrentlist")
 	os.remove("allsubs")
 	os.remove("tvlist")
