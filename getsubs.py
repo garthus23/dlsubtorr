@@ -23,27 +23,9 @@ if __name__ == "__main__":
 	
 	showlist = my_dictionary()
 	get_tvshow_list(showlist, name)
+	print_showlist(showlist, name)
+	name = input_show_choice(showlist)	
 
-	if len(showlist) == 0:
-		print("No TvShow Found")
-		exit(12)
-
-	print('')
-	for key, value in showlist.items():
-		if name in value :
-			print("[{0:3} ] [{1}]".format(key, value))
-
-	if len(showlist) == 1:
-		name = showlist[1]
-	else:
-		choice = input("\nChoose a TvShow [1:{}] : ".format(len(showlist)))
-		if choice.isdigit() and int(choice) <= len(showlist):
-			choice = int(choice)
-		else:
-			print("Err : Not a Digit or not in range")
-			exit(12)
-
-		name = showlist[choice]
 	if season.isdigit() and episode.isdigit():
 		season = int(season)
 		episode = int(episode)
@@ -60,7 +42,7 @@ if __name__ == "__main__":
 	url="https://www.addic7ed.com/{}".format(link)
 	name = name.replace('\'', '')
 	ep = ep.replace('.','_')
-
+	
 	subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
 	sub_dl(url, subname)
 

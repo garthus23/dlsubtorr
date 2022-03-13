@@ -16,6 +16,33 @@ def print_allsub(subdict):
 	
 	return(count)
 
+def print_showlist(showdict, name):
+
+	if len(showdict) == 0:
+		print("No TvShow Found")
+		exit(12)
+
+	print('')
+	for key, value in showdict.items():
+		if name in value :
+			print("[{0:3} ] [{1}]".format(key, value))
+	return (0)
+
+def input_show_choice(showdict):
+	if len(showdict) == 1:
+		return (showdict[1])
+	else:
+		choice = input("\nChoose a TvShow [1:{}] : ".format(len(showdict)))
+		if choice.isdigit() and int(choice) <= len(showdict):
+			choice = int(choice)
+		else:
+			print("Err : Not a Digit or not in range")
+			exit(12)
+
+		return(showdict[choice])
+
+
+
 def input_sub_choice(allsub, i):
 
 		choice = input("\n[ Which Sub do you want	? ] [1-{}] : ".format(i-1))
