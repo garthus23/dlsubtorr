@@ -37,7 +37,6 @@ if __name__ == "__main__":
 	i = print_allsub(indexall)
 	link,ep = input_sub_choice(indexall, i)
 
-	r = requests.get("https://www.addic7ed.com/{}".format(link), headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
 	url="https://www.addic7ed.com/{}".format(link)
 	name = name.replace('\'', '')
 	ep = ep.replace('.','_')
