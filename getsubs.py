@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import sys
-from bs4 import BeautifulSoup
 from parser import *
 from data_process import *
 from print_input import *
