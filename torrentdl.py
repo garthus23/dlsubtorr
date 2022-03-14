@@ -6,7 +6,7 @@ def torrentdl(torrentdict, choice, vidname, title, name):
 	name = re.split(r'[\ \.]', name)[0]
 
 	os.environ["TNAME"] = vidname
-	os.environ["TLINK"] = torrentdict[choice]               
+	os.environ["TLINK"] = list(torrentdict.values())[choice]
 	os.environ["SNAME"] = name
 	os.environ["SEP"] = title
 

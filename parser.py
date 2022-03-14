@@ -46,20 +46,20 @@ def get_sub_list(sublist):
 		return (sublist)
 
 
-def get_torrent_list(season, episode):
+def get_torrent_list(season, episode, ver):
 
 	with open("torrentlist", "r") as f:
 		soup = BeautifulSoup(f.read(), 'html.parser')
 		torrents = soup.find_all(class_="magnet")
+		torrenttitle = my_dictionary()
 		torrentdict = my_dictionary()
 				 
 		print('')
-		i = 1
 		title="S{}E{}".format(season, episode)
 		for torrent in torrents :
-			if title in torrent.get('title'):
+			if title in torrent.get('title'): 
 				if "720p" in torrent.get('title') or "1080p" in torrent.get('title'):
-						print("[{0:3} ][{1}]".format(i, torrent.get('title')))
-						torrentdict.add(i, torrent.get('href'))
-						i=i+1
+					for value in ver:
+						if value in torrent.get('title') and len(value) > 2:
+							torrentdict.add(torrent.get('title'), torrent.get('href'))
 	return(torrentdict)

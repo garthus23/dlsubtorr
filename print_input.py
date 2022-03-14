@@ -28,7 +28,22 @@ def print_showlist(showdict, name):
 			print("[{0:3} ] [{1}]".format(key, value))
 	return (0)
 
+def print_torrentlist(torrentdict):
+
+	if len(torrentdict) == 0:
+		print("No torrent Found")
+		exit(12)
+	i = 1
+	for key in torrentdict.keys():
+		print("[{0:3} ] [{1}]".format(i,key))
+		i+=1
+
+	return(0)
+
+
+
 def input_show_choice(showdict):
+
 	if len(showdict) == 1:
 		return (showdict[1])
 	else:
@@ -45,7 +60,8 @@ def input_show_choice(showdict):
 
 def input_sub_choice(allsub, i):
 
-		choice = input("\n[ Which Sub do you want	? ] [1-{}] : ".format(i-1))
+
+		choice = input("\n[ Which Sub do you want	? ] [1-{}] : ".format(i))
 		print('')
 
 		if choice.isdigit():
@@ -54,7 +70,7 @@ def input_sub_choice(allsub, i):
 			print("not number")
 			exit(12)
 
-		if choice < i:
+		if choice <= i:
 			for value in allsub[choice] :
 				ep = value
 			if len(allsub[choice][ep]) == 1 :
@@ -84,13 +100,16 @@ def input_sub_choice(allsub, i):
 		return (link, ep)
 
 def input_torrent_choice(torrentdict):
+	
+	if len(torrentdict) == 1:
+		return (0)
 
 	choice = input("\n[ Choose a torrent ] [1-{}] : ".format(len(torrentdict)))
 
-	if choice.isdigit() and int(choice) <= len(torrentdict):
+	if choice.isdigit() and int(choice) <= len(torrentdict) + 1:
 		choice = int(choice)
 	else:
 		print('Not a good choice')
 		exit(13)
 
-	return (choice)
+	return (choice-1)

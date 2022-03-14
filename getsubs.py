@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import re
 from parser import *
 from data_process import *
 from print_input import *
@@ -40,6 +41,7 @@ if __name__ == "__main__":
 	url="https://www.addic7ed.com/{}".format(link)
 	name = name.replace('\'', '')
 	ep = ep.replace('.','_')
+	ver = re.split(r"\-|\ |\+|\_", ep)
 	
 	subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
 	sub_dl(url, subname)
@@ -52,7 +54,8 @@ if __name__ == "__main__":
 	url = "https://eztv.ro/search/{}".format(name)
 	html_dl(url, "torrentlist")
 
-	torrentdict = get_torrent_list(season, episode)
+	torrentdict = get_torrent_list(season, episode, ver)
+	print_torrentlist(torrentdict)
 	torrentchoice = input_torrent_choice(torrentdict)
 	
 	torrentdl(torrentdict, torrentchoice, vidname, title, name)	
