@@ -63,7 +63,7 @@ class tvshow:
                         url = "https://www.addic7ed.com/{}".format(self.subs[version])
                         sub_dl(url,filename)
                         
-                        os.environ["SNAME"] = name
+                        os.environ["SNAME"] = name.split('_')[0]
                         os.environ["SEP"] = "S{}E{}".format(self.season, self.episode)
                         os.environ["TNAME"] = "{}_S{}E{}_{}.mkv".format(name, self.season, self.episode, ver) 
                         os.environ["TLINK"] = self.torrents[key]
