@@ -108,7 +108,7 @@ with open('tvtime', 'r') as f:
         obj = tvshow(show.text.lower(), ep.h2.a.text[1:3], ep.h2.a.text[4:])
         if obj.checkdl() == 1 :
             continue
-        url = "https://eztv.ro/search/{}".format(obj.name).replace('\'', "")
+        url = "https://eztv.ro/search/^{}".format(obj.name).replace('\'', "")
         html_dl(url, "torrentlist")
         obj.torrentlist()
         url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(obj.name, obj.season, obj.episode)
