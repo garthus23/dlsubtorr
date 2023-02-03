@@ -1,5 +1,6 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
+from os.path import exists
 import sys
 import re
 from parser import *
@@ -10,7 +11,8 @@ from torrentdl import torrentdl
 
 if __name__ == "__main__":
 
-        html_dl("https://www.addic7ed.com", "tvlist")
+        if not exists('tvlist'):
+            html_dl("https://www.addic7ed.com", "tvlist")
 
         if len(sys.argv) == 4 :
                 name = sys.argv[1]
@@ -20,7 +22,7 @@ if __name__ == "__main__":
                 name = input("Show Title : ").lower()
                 season = input("Season : ")
                 episode = input("Episode : ")
-        
+
         showlist = my_dictionary()
         get_tvshow_list(showlist, name)
         print_showlist(showlist, name)
@@ -44,7 +46,6 @@ if __name__ == "__main__":
         ver = re.split(r"\-|\ |\+|\_", ep)
         
         subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
-        print(subname)
         sub_dl(url, subname)
 
         season = "{:02d}".format(season)
@@ -61,6 +62,6 @@ if __name__ == "__main__":
         
         torrentdl(torrentdict, torrentchoice, vidname, title, name)     
                         
-        files = ['torrentlist', 'allsubs', 'tvlist']
-        for file in files:
-                html_remove(file)
+        #files = ['torrentlist', 'allsubs', 'tvlist']
+        #for file in files:
+        #        html_remove(file)

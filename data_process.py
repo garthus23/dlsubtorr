@@ -13,19 +13,21 @@ class my_dictionary(dict):
 
 
 def html_dl(url,file):
-	
-	r = requests.get(url)
-	with open(file, 'w') as f:
-		f.write(r.text)
-	return 0
+    
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0', 'Connection':'close'}
+    r = requests.get(url, headers=headers)
+    print(r.status_code)
+    with open(file, 'w') as f:
+        f.write(r.text)
+    return 0
 
 def sub_dl(url,file):
-	
-	r = requests.get(url, headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
-	with open("./dl/{}".format(file), 'w') as f:
-		f.write(r.text)
-	return 0
+    
+    r = requests.get(url, headers={"Referer": "https://www.addic7ed.com/"}, allow_redirects=True)
+    with open("./dl/{}".format(file), 'w') as f:
+        f.write(r.text)
+    return 0
 
 
 def html_remove(file):
-	os.remove(file)
+    os.remove(file)

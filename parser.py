@@ -38,7 +38,9 @@ def get_sub_list(sublist):
                                         lang.add(language.text.replace('\n', '').split(' (')[0], link.get('href'))
                                 epsubs = my_dictionary()
                                 epsubs.add(title, lang)
-                                sublist.add(i, epsubs)
+                                for key, value in lang.items():
+                                    if key == 'English' or key == 'French':
+                                        sublist.add(i, epsubs)
                                 i+=1
 
                         except Exception as e: 
@@ -59,7 +61,6 @@ def get_torrent_list(season, episode, ver):
                 for torrent in torrents :
                         if title in torrent.get('title'): 
                                 if "720p" in torrent.get('title') or "1080p" in torrent.get('title'):
-                                        for value in ver:
-                                                if value in torrent.get('title') and len(value) > 2:
-                                                        torrentdict.add(torrent.get('title'), torrent.get('href'))
+                                    if len(torrent.get('title')) > 2:
+                                        torrentdict.add(torrent.get('title'), torrent.get('href'))
         return(torrentdict)
