@@ -2,14 +2,14 @@
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install requests, BeautifulSoup.
+python pip to install requests, BeautifulSoup.
 
 ```bash
 pip install bs4 
 pip install requests
 ```
 
-For torrent download, install aria2c with your favorite Linux package manager
+Install aria2c,ffprobe for torrent download
 
 ## Usage
 
@@ -24,4 +24,4 @@ or
 
 ## Infos
 
-[ ¤ ] in sublist are subtitles for deaf and hard-of-hearing
+[ HI ] in sublist are subtitles for deaf and hard-of-hearing
