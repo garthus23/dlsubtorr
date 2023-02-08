@@ -1,5 +1,7 @@
 import requests
 import os
+import subprocess
+import json
 
 class my_dictionary(dict):
   
@@ -30,3 +32,11 @@ def sub_dl(url,file):
 
 def html_remove(file):
     os.remove(file)
+
+def torrent_duration(file):
+    metadata="dl/{}".format(file)
+    result = subprocess.Popen(["ffprobe", "-hide_banner", metadata],stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
+    for x in result.stdout.readlines():
+        if "Duration" in str(x):
+            return(str(x[12:23]).replace('b',''))
+    return 0

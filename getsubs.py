@@ -26,11 +26,28 @@ if __name__ == "__main__":
         showlist = my_dictionary()
         get_tvshow_list(showlist, name)
         print_showlist(showlist, name)
-        namesub = input_show_choice(showlist)      
 
         if season.isdigit() and episode.isdigit():
                 season = int(season)
                 episode = int(episode)
+
+        namesub = input_show_choice(showlist)      
+        season = "{:02d}".format(season)
+        episode = "{:02d}".format(episode)
+        title = "S{}E{}".format(season, episode)
+        vidname = '{}_S{}E{}.mkv'.format(name, season, episode).replace(' ','_')
+
+        url = "https://eztv.ro/search/{} {}".format(name, title)
+        html_dl(url, "torrentlist")
+
+        torrentdict = get_torrent_list(season, episode)
+        print_torrentlist(torrentdict)
+        torrentchoice = input_torrent_choice(torrentdict)
+        
+        torrentdl(torrentdict, torrentchoice, vidname, title, name)     
+
+        print('\nVideo Duration : {}'.format(torrent_duration(vidname)))
+
 
         url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(namesub, season, episode)
         html_dl(url, "allsubs")
@@ -39,29 +56,16 @@ if __name__ == "__main__":
         get_sub_list(indexall)
         i = print_allsub(indexall)
         link,ep = input_sub_choice(indexall, i)
-
+ 
         url="https://www.addic7ed.com/{}".format(link)
         namesub = namesub.replace('\'', '')
         ep = ep.replace('.','_')
         ver = re.split(r"\-|\ |\+|\_", ep)
-        
-        subname = "{}_S{:02d}E{:02d}_{}.srt".format(namesub, season, episode, ep).replace(' ','_')
+         
+        subname = "{}_S{}E{}.srt".format(name, season, episode).replace(' ','_')
         sub_dl(url, subname)
 
-        season = "{:02d}".format(season)
-        episode = "{:02d}".format(episode)
-        title = "S{}E{}".format(season, episode)
-        vidname = '{}_S{}E{}_{}.mkv'.format(name, season, episode, ep).replace(' ','_')
-
-        url = "https://eztv.ro/search/{} {}".format(name, title)
-        html_dl(url, "torrentlist")
-
-        torrentdict = get_torrent_list(season, episode, ver)
-        print_torrentlist(torrentdict)
-        torrentchoice = input_torrent_choice(torrentdict)
-        
-        torrentdl(torrentdict, torrentchoice, vidname, title, namesub)     
-                        
+                                
         #files = ['torrentlist', 'allsubs', 'tvlist']
         #for file in files:
         #        html_remove(file)

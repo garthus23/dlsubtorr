@@ -24,7 +24,7 @@ def get_sub_list(sublist):
                 i = 1
                 for sub in subs:
                         try:
-                                title = sub.find(class_="NewsTitle").text.split(',')[0].replace('Version ', '')
+                                title = sub.find(class_="NewsTitle").text#.split(',')[0].replace('Version ', '')
                                 langs = sub.find_all(class_="language")
                                 links = sub.find_all('a', class_="buttonDownload")
                                 for elem in links:
@@ -32,7 +32,7 @@ def get_sub_list(sublist):
                                         if not strong.find("most"):
                                                 links.remove(elem)
                                 if sub.find(title="Hearing Impaired"):
-                                        title = "{} ¤ ".format(title)
+                                        title = "{} HI ".format(title)
                                 lang = my_dictionary()
                                 for language, link in zip(langs, links) :
                                         lang.add(language.text.replace('\n', '').split(' (')[0], link.get('href'))
@@ -48,7 +48,7 @@ def get_sub_list(sublist):
                 return (sublist)
 
 
-def get_torrent_list(season, episode, ver):
+def get_torrent_list(season, episode):
 
         with open("torrentlist", "r") as f:
                 soup = BeautifulSoup(f.read(), 'html.parser')
