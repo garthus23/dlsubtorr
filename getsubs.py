@@ -26,13 +26,13 @@ if __name__ == "__main__":
         showlist = my_dictionary()
         get_tvshow_list(showlist, name)
         print_showlist(showlist, name)
-        name = input_show_choice(showlist)      
+        namesub = input_show_choice(showlist)      
 
         if season.isdigit() and episode.isdigit():
                 season = int(season)
                 episode = int(episode)
 
-        url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(name, season, episode)
+        url = "https://www.addic7ed.com/serie/{}/{}/{}/all".format(namesub, season, episode)
         html_dl(url, "allsubs")
 
         indexall = my_dictionary()
@@ -41,11 +41,11 @@ if __name__ == "__main__":
         link,ep = input_sub_choice(indexall, i)
 
         url="https://www.addic7ed.com/{}".format(link)
-        name = name.replace('\'', '')
+        namesub = namesub.replace('\'', '')
         ep = ep.replace('.','_')
         ver = re.split(r"\-|\ |\+|\_", ep)
         
-        subname = "{}_S{:02d}E{:02d}_{}.srt".format(name, season, episode, ep).replace(' ','_')
+        subname = "{}_S{:02d}E{:02d}_{}.srt".format(namesub, season, episode, ep).replace(' ','_')
         sub_dl(url, subname)
 
         season = "{:02d}".format(season)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         print_torrentlist(torrentdict)
         torrentchoice = input_torrent_choice(torrentdict)
         
-        torrentdl(torrentdict, torrentchoice, vidname, title, name)     
+        torrentdl(torrentdict, torrentchoice, vidname, title, namesub)     
                         
         #files = ['torrentlist', 'allsubs', 'tvlist']
         #for file in files:
