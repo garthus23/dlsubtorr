@@ -5,11 +5,14 @@ def print_allsub(subdict):
     for ind,values in subdict.items():
         print("[{0:3} ".format(ind), end=']')
         for key in values:
-            print("[{0:30}".format(key), end=']')
-            for lang in subdict[ind][key]:
-                print("[{}".format(lang), end=']')
-                count+=1
-            print('')
+            if key != 'news':
+                print("[{0:30}".format(key), end=']')
+                for lang in subdict[ind][key]:
+                    print("[{}".format(lang), end=']')
+                    count+=1
+            else:
+                print("[{}".format(values['news'][0:25]).replace(" ", ""), end=']')
+                print('')
     if count == 0:
         print("no Subs Found, Season or Episode out of range")
         exit(23)
@@ -72,7 +75,8 @@ def input_sub_choice(allsub, i):
 
         if choice <= i:
             for value in allsub[choice] :
-                ep = value
+                if value != 'news':
+                    ep = value
             if len(allsub[choice][ep]) == 1 :
                 lang = list(allsub[choice][ep].keys())[0]
             else:

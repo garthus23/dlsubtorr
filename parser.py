@@ -27,6 +27,7 @@ def get_sub_list(sublist):
                                 title = sub.find(class_="NewsTitle").text#.split(',')[0].replace('Version ', '')
                                 langs = sub.find_all(class_="language")
                                 links = sub.find_all('a', class_="buttonDownload")
+                                news = sub.find_all('td', class_="newsDate")
                                 for elem in links:
                                         strong = elem.strong.text
                                         if not strong.find("most"):
@@ -38,6 +39,7 @@ def get_sub_list(sublist):
                                         lang.add(language.text.replace('\n', '').split(' (')[0], link.get('href'))
                                 epsubs = my_dictionary()
                                 epsubs.add(title, lang)
+                                epsubs.add('news', news[0].text.replace('\t','').replace('\n',''))
                                 for key, value in lang.items():
                                     if key == 'English' or key == 'French':
                                         sublist.add(i, epsubs)
@@ -54,7 +56,6 @@ def get_torrent_list(season, episode):
                 soup = BeautifulSoup(f.read(), 'html.parser')
                 torrents = soup.find_all(class_="magnet")
                 infos = soup.find_all('a', class_="epinfo")
-                torrenttitle = my_dictionary()
                 torrentdict = my_dictionary()
                                  
                 print('')

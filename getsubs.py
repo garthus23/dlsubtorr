@@ -37,7 +37,7 @@ if __name__ == "__main__":
         title = "S{}E{}".format(season, episode)
         vidname = '{}_S{}E{}.mkv'.format(name, season, episode).replace(' ','_')
 
-        url = "https://eztv.ro/search/{} {}".format(name, title)
+        url = "https://eztv.ro/search/{} {}".format(name.replace('\'',''), title)
         html_dl(url, "torrentlist")
 
         torrentdict = get_torrent_list(season, episode)
