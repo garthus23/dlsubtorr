@@ -66,6 +66,6 @@ if __name__ == "__main__":
         sub_dl(url, subname)
 
                                 
-        #files = ['torrentlist', 'allsubs', 'tvlist']
-        #for file in files:
-        #        html_remove(file)
+        files = ['torrentlist', 'allsubs', 'infolist']
+        for file in files:
+                html_remove(file)

@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from data_process import my_dictionary
+from data_process import *
 
 def get_tvshow_list(showlist, name):
 
@@ -53,14 +53,23 @@ def get_torrent_list(season, episode):
         with open("torrentlist", "r") as f:
                 soup = BeautifulSoup(f.read(), 'html.parser')
                 torrents = soup.find_all(class_="magnet")
+                infos = soup.find_all('a', class_="epinfo")
                 torrenttitle = my_dictionary()
                 torrentdict = my_dictionary()
                                  
                 print('')
                 title="S{}E{}".format(season, episode)
-                for torrent in torrents :
+                for torrent,ep in zip(torrents,infos) :
                         if title in torrent.get('title'): 
                                 if "720p" in torrent.get('title') or "1080p" in torrent.get('title'):
                                     if len(torrent.get('title')) > 2:
-                                        torrentdict.add(torrent.get('title'), torrent.get('href'))
+                                        info= [torrent.get('href'), ep.get('href')]
+                                        torrentdict.add(torrent.get('title'), info)
+                for key, value in torrentdict.items():
+                    url="https://eztv1.xyz{}".format(value[1])
+                    html_dl(url, "infolist")
+                    with open("infolist", "r") as f:
+                        soup = BeautifulSoup(f.read(), 'html.parser')
+                        seed = soup.find_all('span', class_="stat_red")
+                        value.append(seed[0].text)
         return(torrentdict)

@@ -34,8 +34,8 @@ def print_torrentlist(torrentdict):
         print("No torrent Found")
         exit(12)
     i = 1
-    for key in torrentdict.keys():
-        print("[{0:3} ] [{1}]".format(i,key))
+    for key, value in torrentdict.items():
+        print("[{0:3} ] [{1}] [S:{2}]".format(i,key,value[2]))
         i+=1
 
     return(0)
